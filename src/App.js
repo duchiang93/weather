@@ -4,7 +4,7 @@ import "./styles/style.css";
 
 function App() {
   const [weatherElement, setWeatherElement] = useState({
-    observationTime: new Data(),
+    observationTime: new Date(),
     locationName: "",
     humid: 0,
     temperature: 0,
