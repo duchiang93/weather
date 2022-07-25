@@ -60,7 +60,7 @@
       margin-bottom: 20px;
 
       .AirFlowIcon {
-        width: 25px;
+        width: 30px;
         height: auto;
         margin-right: 30px;
       }
@@ -74,13 +74,24 @@
       color: #828282;
 
       .RainIcon {
-        width: 25px;
+        width: 30px;
         height: auto;
         margin-right: 30px;
       }
     }
     .RedoIcon {
-      color: #999999;
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      right: 15px;
+      bottom: 15px;
+      cursor: pointer;
+    }
+    .observationTime {
+      position: absolute;
+      right: 50px;
+      bottom: 15px;
+      color: #828282;
     }
   }
 }
