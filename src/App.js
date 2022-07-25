@@ -1,94 +1,31 @@
 import React from "react";
-import styled from "@emotion/styled";
 import Icon from "./Icon";
-
-const Container = styled.div`
-  background-color: #ededed;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const WeatherCard = styled.div`
-  position: relative;
-  min-width: 360px;
-  box-shadow: 0 1px 3px 0 #999999;
-  background-color: #f9f9f9;
-  box-sizing: border-box;
-  padding: 30px 15px;
-`;
-
-const Location = styled.div`
-  font-size: 28px;
-  color: #212121;
-  margin-bottom: 20px;
-`;
-
-const Description = styled.div`
-  font-size: 16px;
-  color: #828282;
-  margin-bottom: 30px;
-`;
-
-const CurrentWeather = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-`;
-
-const Temperature = styled.div`
-  color: #757575;
-  font-size: 96px;
-  font-weight: 300;
-  display: flex;
-`;
-
-const Celsius = styled.div`
-  font-weight: normal;
-  font-size: 42px;
-`;
-
-const AirFlow = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 16x;
-  font-weight: 300;
-  color: #828282;
-  margin-bottom: 20px;
-`;
-
-const Rain = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 16x;
-  font-weight: 300;
-  color: #828282;
-`;
+import "./styles/style.css";
 
 function App() {
   return (
-    <Container>
-      <WeatherCard>
-        <Location>台北市</Location>
-        <Description>多雲時晴</Description>
-        <CurrentWeather>
-          <Temperature>
-            <Icon.CloudyIcon />
-            23<Celsius>°C</Celsius>
-          </Temperature>
-        </CurrentWeather>
-        <AirFlow>
-          <Icon.AirFlowIcon />
+    <div className="container">
+      <div className="weatherCard">
+        <div className="location">台北市</div>
+        <div className="description">多雲時晴</div>
+
+        <div className="currentWeather">
+          <div className="temperature">
+            23<div className="celsius">°C</div>
+          </div>
+          <Icon.CloudyIcon className="CloudyIcon" />
+        </div>
+        <div className="airFlow">
+          <Icon.AirFlowIcon className="AirFlowIcon" />
           23 m/h
-        </AirFlow>
-        <Rain>
-          <Icon.RainIcon />
+        </div>
+        <div className="rain">
+          <Icon.RainIcon className="RainIcon" />
           48%
-        </Rain>
-      </WeatherCard>
-    </Container>
+        </div>
+        <Icon.RedoIcon className="RedoIcon" />
+      </div>
+    </div>
   );
 }
 
