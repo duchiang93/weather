@@ -34,6 +34,7 @@ const fetchCurrentWeather = () => {
     });
 };
 
+//串接降雨機率與天氣描述API
 const fetchWeatherForecast = () => {
   return fetch(
     "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-BEFBC2DC-A35D-45D0-88E1-BD1CCC49891F&locationName=臺北市 "
@@ -59,6 +60,19 @@ const fetchWeatherForecast = () => {
     });
 };
 
+//串接日落及日出時間API
+const fetchSunsetTime = (nowDate) => {
+  return fetch(
+    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/A-B0062-001?Authorization=CWB-BEFBC2DC-A35D-45D0-88E1-BD1CCC49891F&format=JSON&locationName=%E8%87%BA%E4%B8%AD%E5%B8%82&dataTime=${nowDate}`
+  )
+    .then((response) => response.json())
+    .then((data) =>
+      console.log(
+        data.records.locations.location[0].time[0].parameter[1].parameterValue
+      )
+    );
+};
+
 function App() {
   const [weatherElement, setWeatherElement] = useState({
     observationTime: new Date(),
@@ -78,6 +92,20 @@ function App() {
         fetchCurrentWeather(),
         fetchWeatherForecast(),
       ]);
+
+      // 取得當前時間
+      const now = new Date();
+      // 將當前時間以 "yyyy-mm-dd" 的時間格式呈現
+      const nowDate = Intl.DateTimeFormat("zh-TW", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
+        .format(now)
+        .replace(/\//g, "-");
+
+      await fetchSunsetTime(nowDate);
+
       setWeatherElement({
         ...currentWeather,
         ...weatherForecast,
