@@ -110,13 +110,15 @@
   margin-right: 30px;
 }
 
-.container .weatherCard .RedoIcon {
+.container .weatherCard .RefreshIcon {
   width: 20px;
   height: 20px;
   position: absolute;
-  right: 15px;
-  bottom: 15px;
+  right: -30px;
+  bottom: 0px;
   cursor: pointer;
+  -webkit-animation: rotate infinite 0s linear;
+          animation: rotate infinite 0s linear;
 }
 
 .container .weatherCard .observationTime {
@@ -124,5 +126,27 @@
   right: 50px;
   bottom: 15px;
   color: #828282;
+}
+
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+  to {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+}
+
+@keyframes rotate {
+  from {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+  to {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
 }
 /*# sourceMappingURL=style.css.map */

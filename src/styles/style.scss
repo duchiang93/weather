@@ -79,19 +79,30 @@
         margin-right: 30px;
       }
     }
-    .RedoIcon {
+    .RefreshIcon {
       width: 20px;
       height: 20px;
       position: absolute;
-      right: 15px;
-      bottom: 15px;
+      right: -30px;
+      bottom: 0px;
       cursor: pointer;
+      animation: rotate infinite 0s linear;
+      // animation-duration: 1.5s;
     }
+
     .observationTime {
       position: absolute;
       right: 50px;
       bottom: 15px;
       color: #828282;
+    }
+  }
+  @keyframes rotate {
+    from {
+      transform: rotate(360deg);
+    }
+    to {
+      transform: rotate(0deg);
     }
   }
 }

@@ -62,9 +62,9 @@ const fetchWeatherForecast = () => {
 
 //串接日落及日出時間API
 const fetchSunsetTime = (locationName) => {
-  let sunRise;
-  let sunSet;
-  let nowTime;
+  let sunRise = new Number();
+  let sunSet = new Number();
+  let nowTime = new Number();
 
   // 取得當前時間
   const now = new Date();
@@ -83,13 +83,14 @@ const fetchSunsetTime = (locationName) => {
     .then((response) => response.json())
     .then((data) => {
       sunRise = new Date(
-        `${nowDate}${data.records.locations.location[0].time[0].parameter[1].parameterValue}`
+        `${nowDate} ${data.records.locations.location[0].time[0].parameter[1].parameterValue}`
       ).getTime();
       sunSet = new Date(
-        `${nowDate}${data.records.locations.location[0].time[0].parameter[5].parameterValue}`
+        `${nowDate} ${data.records.locations.location[0].time[0].parameter[5].parameterValue}`
       ).getTime();
       nowTime = new Date().getTime();
     });
+
   return sunRise <= nowTime && nowTime <= sunSet ? "day" : "night";
 };
 
@@ -104,7 +105,20 @@ function App() {
     weatherCode: 0,
     rainPossibility: 0,
     comfortability: "",
+    isLoading: true,
   });
+
+  const {
+    observationTime,
+    locationName,
+    temperature,
+    windSpeed,
+    weatherCode,
+    rainPossibility,
+    comfortability,
+    isLoading,
+  } = weatherElement;
+
   const [currentTheme, setCurrentTheme] = useState("light");
 
   const fetchData = useCallback(() => {
@@ -117,16 +131,19 @@ function App() {
       setWeatherElement({
         ...currentWeather,
         ...weatherForecast,
+        isLoading: false,
       });
     };
+
+    setWeatherElement((prevState) => ({
+      ...prevState,
+      isLoading: true,
+    }));
 
     fetchingData();
   }, []);
 
-  const moment = useMemo(
-    () => fetchSunsetTime(weatherElement.locationName),
-    [weatherElement.locationName]
-  );
+  const moment = useMemo(() => fetchSunsetTime(locationName), [locationName]);
 
   useEffect(() => {
     fetchData();
@@ -139,33 +156,45 @@ function App() {
   return (
     <div className="container">
       <div className="weatherCard">
-        <div className="location">{weatherElement.locationName}</div>
-        <div className="description">{weatherElement.comfortability}</div>
+        <div className="location">{locationName}</div>
+        <div className="description">{comfortability}</div>
         <div className="currentWeather">
           <div className="temperature">
-            {Math.round(weatherElement.temperature)}
+            {Math.round(temperature)}
             <div className="celsius">°C</div>
           </div>
           <WeatherIcon
-            currentWeatherCode={weatherElement.weatherCode}
-            moment="night"
+            currentWeatherCode={weatherCode}
+            moment={moment || "day"}
           />
         </div>
         <div className="airFlow">
           <Icon.AirFlow className="AirFlowIcon" />
-          {weatherElement.windSpeed} m/h
+          {windSpeed} m/h
         </div>
         <div className="rain">
           <Icon.Rain className="RainIcon" />
-          {Math.round(weatherElement.rainPossibility)} %
+          {Math.round(rainPossibility)} %
         </div>
-        <Icon.Redo className="RedoIcon" onClick={fetchData} />
-        <div className="observationTime">
-          最後觀測時間：
-          {new Intl.DateTimeFormat("zh-TW", {
-            hour: "numeric",
-            minute: "numeric",
-          }).format(new Date(weatherElement.observationTime))}{" "}
+
+        <div className="loading" onClick={fetchData}>
+          <div className="observationTime">
+            最後觀測時間：
+            {new Intl.DateTimeFormat("zh-TW", {
+              hour: "numeric",
+              minute: "numeric",
+            }).format(new Date(observationTime))}{" "}
+            {isLoading ? (
+              <Icon.LoadingIcon
+                className="RefreshIcon"
+                style={{
+                  animationDuration: ` ${isLoading ? "1.5s" : "0s"}`,
+                }}
+              />
+            ) : (
+              <Icon.Refresh className="RefreshIcon" />
+            )}
+          </div>
         </div>
       </div>
     </div>

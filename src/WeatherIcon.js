@@ -50,31 +50,32 @@ const weatherIcons = {
 };
 
 const IconContainer = styled.div`
-  flex-basis: 30%;
+  flex-basis: 45%;
 
   svg {
-    max-height: 110px;
+    max-height: 140px;
   }
 `;
-const weatherCode2Type = (weatherCode) => {
-  const [weatherType] =
-    Object.entries(weatherTypes).find(([weatherType, weatherCodes]) =>
+const weatherCode2Type = (weatherCode) =>
+  Object.entries(weatherTypes).reduce(
+    (currentWeatherType, [weatherType, weatherCodes]) =>
       weatherCodes.includes(Number(weatherCode))
-    ) || [];
-
-  return weatherType;
-};
+        ? weatherType
+        : currentWeatherType,
+    ""
+  );
 
 const WeatherIcon = ({ currentWeatherCode, moment }) => {
   const [currentWeatherIcon, setCurrentWeatherIcon] = useState("isClear");
+
   const theWeatherIcon = useMemo(
     () => weatherCode2Type(currentWeatherCode),
     [currentWeatherCode]
   );
 
   useEffect(() => {
-    setCurrentWeatherIcon(currentWeatherIcon);
-  }, [currentWeatherCode]);
+    setCurrentWeatherIcon(theWeatherIcon);
+  }, [theWeatherIcon]);
 
   return (
     <IconContainer>{weatherIcons[moment][currentWeatherIcon]}</IconContainer>
