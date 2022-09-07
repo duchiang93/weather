@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import WeatherCard from "./WeatherCard";
 import useWeatherApi from "./useWeatherApi";
 import WeatherSetting from "./WeatherSetting";
+import { ThemeProvider } from "@emotion/react";
 
 const theme = {
   light: {
@@ -32,6 +33,15 @@ const Container = styled.div`
   justify-content: center;
 `;
 
+const WeatherCardStyled = styled.div`
+  position: relative;
+  min-width: 360px;
+  box-shadow: ${({ theme }) => theme.boxShadow};
+  background-color: ${({ theme }) => theme.foregroundColor};
+  box-sizing: border-box;
+  padding: 30px 15px;
+`;
+
 const App = () => {
   const [weatherElement, fetchData] = useWeatherApi();
   const [currentTheme, setCurrentTheme] = useState("light");
@@ -42,24 +52,18 @@ const App = () => {
   }, [moment]);
 
   return (
-    <div className="ThemeProvider">
-      <div className="container">
-        <Container theme={theme.dark} />
-        <div
-          className="weatherCard"
-          style={{
-            backgroundColor: currentTheme === "light" ? "#f9f9f9" : "#000000",
-          }}
-        >
+    <ThemeProvider theme={theme[currentTheme]}>
+      <Container>
+        <WeatherCardStyled>
           <WeatherCard
             weatherElement={weatherElement}
             moment={moment}
             fetchData={fetchData}
           />
-        </div>
+        </WeatherCardStyled>
         <WeatherSetting />
-      </div>
-    </div>
+      </Container>
+    </ThemeProvider>
   );
 };
 
