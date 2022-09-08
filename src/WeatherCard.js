@@ -1,106 +1,123 @@
-import React, { Fragment } from "react";
+import React from "react";
 import WeatherIcon from "./WeatherIcon";
 import Icon from "./Icon";
 import styled from "@emotion/styled";
+import { ReactComponent as CogIcon } from "./IMG/cog.svg";
+
+const WeatherCardWrapper = styled.div`
+  position: relative;
+  min-width: 360px;
+  box-shadow: ${({ theme }) => theme.boxShadow};
+  background-color: ${({ theme }) => theme.foregroundColor};
+  box-sizing: border-box;
+  padding: 30px 15px;
+`;
+
+const Location = styled.div`
+  font-size: 28px;
+  color: ${({ theme }) => theme.titleColor};
+  margin-bottom: 20px;
+`;
+
+const Description = styled.div`
+  font-size: 16px;
+  color: ${({ theme }) => theme.textColor};
+  margin-bottom: 15px;
+`;
+
+const CurrentWeather = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+`;
+
+const Temperature = styled.div`
+  color: ${({ theme }) => theme.temperatureColor};
+  font-size: 96px;
+  font-weight: 300;
+  display: flex;
+`;
+
+const Celsius = styled.div`
+  font-weight: normal;
+  font-size: 42px;
+`;
+
+const AirFlow = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 16x;
+  font-weight: 300;
+  color: ${({ theme }) => theme.textColor};
+  margin-bottom: 20px;
+
+  svg {
+    width: 30px;
+    height: auto;
+    margin-right: 30px;
+  }
+`;
+
+const Rain = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 16x;
+  font-weight: 300;
+  color: ${({ theme }) => theme.textColor};
+
+  svg {
+    width: 30px;
+    height: auto;
+    margin-right: 30px;
+  }
+`;
+
+const Refresh = styled.div`
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: flex-end;
+  color: ${({ theme }) => theme.textColor};
+
+  svg {
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    animation: rotate infinite 1.5s linear;
+    animation-duration: ${({ isLoading }) => (isLoading ? "1.5s" : "0s")};
+  }
+
+  @keyframes rotate {
+    from {
+      transform: rotate(360deg);
+    }
+    to {
+      transform: rotate(0deg);
+    }
+  }
+`;
+
+const Cog = styled(CogIcon)`
+  position: absolute;
+  top: 30px;
+  right: 15px;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+`;
 
 const WeatherCard = (props) => {
-  const Location = styled.div`
-    font-size: 28px;
-    color: ${({ theme }) => theme.titleColor};
-    margin-bottom: 20px;
-  `;
-
-  const Description = styled.div`
-    font-size: 16px;
-    color: ${({ theme }) => theme.textColor};
-    margin-bottom: 15px;
-  `;
-
-  const CurrentWeather = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-  `;
-
-  const Temperature = styled.div`
-    color: ${({ theme }) => theme.temperatureColor};
-    font-size: 96px;
-    font-weight: 300;
-    display: flex;
-  `;
-
-  const Celsius = styled.div`
-    font-weight: normal;
-    font-size: 42px;
-  `;
-
-  const AirFlow = styled.div`
-    display: flex;
-    align-items: center;
-    font-size: 16x;
-    font-weight: 300;
-    color: ${({ theme }) => theme.textColor};
-    margin-bottom: 20px;
-
-    .AirFlowIcon {
-      width: 30px;
-      height: auto;
-      margin-right: 30px;
-    }
-  `;
-
-  const Rain = styled.div`
-    display: flex;
-    align-items: center;
-    font-size: 16x;
-    font-weight: 300;
-    color: ${({ theme }) => theme.textColor};
-
-    .RainIcon {
-      width: 30px;
-      height: auto;
-      margin-right: 30px;
-    }
-  `;
-
-  const Refresh = styled.div`
-    color: ${({ theme }) => theme.textColor};
-
-    svg {
-      width: 20px;
-      height: 20px;
-      position: absolute;
-      right: -30px;
-      bottom: 0px;
-      cursor: pointer;
-      animation: rotate infinite 0s linear;
-      animation-duration: ${({ isLoading }) => (isLoading ? "1.5s" : "0s")};
-    }
-
-    @keyframes rotate {
-      from {
-        transform: rotate(360deg);
-      }
-      to {
-        transform: rotate(0deg);
-      }
-    }
-  `;
-
-  const ObservationTime = styled.div`
-    position: absolute;
-    right: 50px;
-    bottom: 15px;
-    color: #828282;
-  `;
-
-  const { weatherElement, moment, fetchData } = props;
+  const { weatherElement, moment, fetchData, setCurrentPage } = props;
   const {
     observationTime,
     locationName,
     temperature,
     windSpeed,
+    description,
     weatherCode,
     rainPossibility,
     comfortability,
@@ -108,9 +125,13 @@ const WeatherCard = (props) => {
   } = weatherElement;
 
   return (
-    <Fragment>
+    <WeatherCardWrapper>
+      <Cog onClick={() => setCurrentPage("WeatherSetting")} />
       <Location>{locationName}</Location>
-      <Description>{comfortability}</Description>
+      <Description>
+        {" "}
+        {description} {comfortability}
+      </Description>
       <CurrentWeather>
         <Temperature>
           {Math.round(temperature)}
@@ -131,16 +152,14 @@ const WeatherCard = (props) => {
       </Rain>
 
       <Refresh onClick={fetchData} isLoading={isLoading}>
-        <ObservationTime>
-          最後觀測時間：
-          {new Intl.DateTimeFormat("zh-TW", {
-            hour: "numeric",
-            minute: "numeric",
-          }).format(new Date(observationTime))}{" "}
-          {isLoading ? <Icon.LoadingIcon /> : <Icon.Refresh />}
-        </ObservationTime>
+        最後觀測時間：
+        {new Intl.DateTimeFormat("zh-TW", {
+          hour: "numeric",
+          minute: "numeric",
+        }).format(new Date(observationTime))}{" "}
+        {isLoading ? <Icon.LoadingIcon /> : <Icon.Refresh />}
       </Refresh>
-    </Fragment>
+    </WeatherCardWrapper>
   );
 };
 

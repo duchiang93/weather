@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles/style.css";
 import styled from "@emotion/styled";
 import WeatherCard from "./WeatherCard";
@@ -27,24 +27,16 @@ const theme = {
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.backgroundColor};
-  height: 100%;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-const WeatherCardStyled = styled.div`
-  position: relative;
-  min-width: 360px;
-  box-shadow: ${({ theme }) => theme.boxShadow};
-  background-color: ${({ theme }) => theme.foregroundColor};
-  box-sizing: border-box;
-  padding: 30px 15px;
-`;
-
 const App = () => {
   const [weatherElement, fetchData] = useWeatherApi();
   const [currentTheme, setCurrentTheme] = useState("light");
+  const [currentPage, setCurrentPage] = useState("WeatherCard");
 
   const moment = weatherElement.currentTime;
   useEffect(() => {
@@ -54,14 +46,18 @@ const App = () => {
   return (
     <ThemeProvider theme={theme[currentTheme]}>
       <Container>
-        <WeatherCardStyled>
+        {currentPage === "WeatherCard" && (
           <WeatherCard
             weatherElement={weatherElement}
             moment={moment}
             fetchData={fetchData}
+            setCurrentPage={setCurrentPage}
           />
-        </WeatherCardStyled>
-        <WeatherSetting />
+        )}
+
+        {currentPage === "WeatherSetting" && (
+          <WeatherSetting setCurrentPage={setCurrentPage} />
+        )}
       </Container>
     </ThemeProvider>
   );
