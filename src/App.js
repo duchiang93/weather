@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./styles/style.css";
 import styled from "@emotion/styled";
 import WeatherCard from "./WeatherCard";
 import useWeatherApi from "./useWeatherApi";
 import WeatherSetting from "./WeatherSetting";
 import { ThemeProvider } from "@emotion/react";
+import { findLocation } from "./utils";
 
 const theme = {
   light: {
@@ -34,11 +35,18 @@ const Container = styled.div`
 `;
 
 const App = () => {
+  const storageCity = localStorage.getItem("cityName");
+  const [currentCity, setCurrentCity] = useState(storageCity || "臺北市");
+
+  const currentLocation = findLocation(currentCity) || {};
+
   const [weatherElement, fetchData] = useWeatherApi();
+
   const [currentTheme, setCurrentTheme] = useState("light");
   const [currentPage, setCurrentPage] = useState("WeatherCard");
 
   const moment = weatherElement.currentTime;
+
   useEffect(() => {
     setCurrentTheme(moment === "day" ? "light" : "dark");
   }, [moment]);
@@ -48,6 +56,7 @@ const App = () => {
       <Container>
         {currentPage === "WeatherCard" && (
           <WeatherCard
+            cityName={currentLocation.cityName}
             weatherElement={weatherElement}
             moment={moment}
             fetchData={fetchData}
@@ -56,7 +65,11 @@ const App = () => {
         )}
 
         {currentPage === "WeatherSetting" && (
-          <WeatherSetting setCurrentPage={setCurrentPage} />
+          <WeatherSetting
+            cityName={currentLocation.cityName}
+            setCurrentCity={setCurrentCity}
+            setCurrentPage={setCurrentPage}
+          />
         )}
       </Container>
     </ThemeProvider>
