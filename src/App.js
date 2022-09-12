@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles/style.css";
 import styled from "@emotion/styled";
 import WeatherCard from "./WeatherCard";

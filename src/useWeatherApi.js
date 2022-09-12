@@ -89,7 +89,7 @@ const fetchWeatherForecast = () => {
     });
 };
 
-const useWeatherApi = () => {
+const useWeatherApi = (currentLocation) => {
   const [weatherElement, setWeatherElement] = useState({
     observationTime: new Date(),
     locationName: "",

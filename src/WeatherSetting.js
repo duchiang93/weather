@@ -23,10 +23,10 @@ const StyledLabel = styled.label`
   margin-bottom: 15px;
 `;
 
-const StyledInputList = styled.input`
+const StyledInputList = styled.select`
   display: block;
   box-sizing: border-box;
-  background: transparent;
+  background: ${({ theme }) => theme.foregroundColor};
   border: 1px solid ${({ theme }) => theme.textColor};
   outline: none;
   width: 100%;
@@ -82,31 +82,6 @@ const Save = styled.button`
   }
 `;
 
-// const locations = [
-//   "嘉義縣",
-//   "新北市",
-//   "嘉義市",
-//   "新竹縣",
-//   "新竹市",
-//   "臺北市",
-//   "臺南市",
-//   "宜蘭縣",
-//   "苗栗縣",
-//   "雲林縣",
-//   "花蓮縣",
-//   "臺中市",
-//   "臺東縣",
-//   "桃園市",
-//   "南投縣",
-//   "高雄市",
-//   "金門縣",
-//   "屏東縣",
-//   "基隆市",
-//   "澎湖縣",
-//   "彰化縣",
-//   "連江縣",
-// ];
-
 const locations = availableLocations.map((location) => location.cityName);
 
 const WeatherSetting = ({ setCurrentPage, cityName, setCurrentCity }) => {
@@ -135,18 +110,17 @@ const WeatherSetting = ({ setCurrentPage, cityName, setCurrentCity }) => {
       <Title>設定</Title>
       <StyledLabel htmlFor="location">地區</StyledLabel>
       <StyledInputList
-        list="location-list"
         id="location"
         name="location"
         onChange={handleChange}
         value={locationName}
-      />
-      <datalist id="location-list">
+        placeholder="Select an option"
+      >
         {" "}
         {locations.map((location) => (
-          <option value={location} key={location} />
+          <option value={location} label={location} key={location} />
         ))}{" "}
-      </datalist>
+      </StyledInputList>
       <ButtonGroup>
         <Back onClick={() => setCurrentPage("WeatherCard")}>返回</Back>
         <Save onClick={handleSave}>儲存</Save>
