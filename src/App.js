@@ -40,7 +40,7 @@ const App = () => {
 
   const currentLocation = findLocation(currentCity) || {};
 
-  const [weatherElement, fetchData] = useWeatherApi();
+  const [weatherElement, fetchData] = useWeatherApi(currentLocation);
 
   const [currentTheme, setCurrentTheme] = useState("light");
   const [currentPage, setCurrentPage] = useState("WeatherCard");

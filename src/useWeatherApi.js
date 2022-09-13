@@ -33,10 +33,10 @@ const fetchSunsetTime = (locationName) => {
     });
 };
 
-const fetchCurrentWeather = () => {
+const fetchCurrentWeather = (locationName) => {
   //加上 return 直接把 fetch API 回傳的 Promise 回傳出去
   return fetch(
-    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=CWB-BEFBC2DC-A35D-45D0-88E1-BD1CCC49891F&locationName=臺北"
+    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=CWB-BEFBC2DC-A35D-45D0-88E1-BD1CCC49891F&locationName=${locationName}`
   )
     .then((response) => response.json())
     .then((data) => {
@@ -64,9 +64,9 @@ const fetchCurrentWeather = () => {
 };
 
 //串接降雨機率與天氣描述API
-const fetchWeatherForecast = () => {
+const fetchWeatherForecast = (cityName) => {
   return fetch(
-    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-BEFBC2DC-A35D-45D0-88E1-BD1CCC49891F&locationName=臺北市 "
+    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-BEFBC2DC-A35D-45D0-88E1-BD1CCC49891F&locationName=${cityName}`
   )
     .then((response) => response.json())
     .then((data) => {
@@ -90,6 +90,7 @@ const fetchWeatherForecast = () => {
 };
 
 const useWeatherApi = (currentLocation) => {
+  const { locationName, cityName } = currentLocation;
   const [weatherElement, setWeatherElement] = useState({
     observationTime: new Date(),
     locationName: "",
@@ -107,8 +108,8 @@ const useWeatherApi = (currentLocation) => {
   const fetchData = useCallback(() => {
     const fetchingData = async () => {
       const [currentWeather, weatherForecast, currentTime] = await Promise.all([
-        fetchCurrentWeather(),
-        fetchWeatherForecast(),
+        fetchCurrentWeather(locationName),
+        fetchWeatherForecast(cityName),
         fetchSunsetTime(),
       ]);
 
@@ -125,7 +126,7 @@ const useWeatherApi = (currentLocation) => {
     }));
 
     fetchingData();
-  }, []);
+  }, [locationName, cityName]);
 
   useEffect(() => {
     fetchData();
