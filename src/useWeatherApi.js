@@ -18,7 +18,7 @@ const fetchSunsetTime = (locationName) => {
     .replace(/\//g, "-");
 
   return fetch(
-    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/A-B0062-001?Authorization=CWB-BEFBC2DC-A35D-45D0-88E1-BD1CCC49891F&format=JSON&locationName=臺北市&dataTime=${nowDate}`
+    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/A-B0062-001?Authorization=CWB-BEFBC2DC-A35D-45D0-88E1-BD1CCC49891F&format=JSON&locationName=${locationName}&dataTime=${nowDate}`
   )
     .then((response) => response.json())
     .then((data) => {
@@ -110,7 +110,7 @@ const useWeatherApi = (currentLocation) => {
       const [currentWeather, weatherForecast, currentTime] = await Promise.all([
         fetchCurrentWeather(locationName),
         fetchWeatherForecast(cityName),
-        fetchSunsetTime(),
+        fetchSunsetTime(cityName),
       ]);
 
       setWeatherElement({
