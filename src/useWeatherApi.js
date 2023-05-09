@@ -18,15 +18,15 @@ const fetchSunsetTime = (locationName) => {
     .replace(/\//g, "-");
 
   return fetch(
-    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/A-B0062-001?Authorization=CWB-BEFBC2DC-A35D-45D0-88E1-BD1CCC49891F&format=JSON&locationName=${locationName}&dataTime=${nowDate}`
+    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/A-B0062-001?Authorization=CWB-5FC27772-F79D-430D-AF49-BB3BC0EFE3C5&format=JSON&locationName=${locationName}&dataTime=${nowDate}`
   )
     .then((response) => response.json())
     .then((data) => {
       sunRise = new Date(
-        `${nowDate} ${data.records.locations.location[0].time[0].parameter[1].parameterValue}`
+        `${nowDate} ${data.records.locations.location[0].time[0].SunRiseTime}`
       ).getTime();
       sunSet = new Date(
-        `${nowDate} ${data.records.locations.location[0].time[0].parameter[5].parameterValue}`
+        `${nowDate} ${data.records.locations.location[0].time[0].SunSetTime}`
       ).getTime();
       nowTime = new Date().getTime();
       return sunRise <= nowTime && nowTime <= sunSet ? "day" : "night";
@@ -36,7 +36,7 @@ const fetchSunsetTime = (locationName) => {
 const fetchCurrentWeather = (locationName) => {
   //加上 return 直接把 fetch API 回傳的 Promise 回傳出去
   return fetch(
-    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=CWB-BEFBC2DC-A35D-45D0-88E1-BD1CCC49891F&locationName=${locationName}`
+    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=CWB-5FC27772-F79D-430D-AF49-BB3BC0EFE3C5&locationName=${locationName}`
   )
     .then((response) => response.json())
     .then((data) => {
@@ -66,7 +66,7 @@ const fetchCurrentWeather = (locationName) => {
 //串接降雨機率與天氣描述API
 const fetchWeatherForecast = (cityName) => {
   return fetch(
-    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-BEFBC2DC-A35D-45D0-88E1-BD1CCC49891F&locationName=${cityName}`
+    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-5FC27772-F79D-430D-AF49-BB3BC0EFE3C5&locationName=${cityName}`
   )
     .then((response) => response.json())
     .then((data) => {
